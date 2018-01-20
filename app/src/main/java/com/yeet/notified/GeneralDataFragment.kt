@@ -23,6 +23,7 @@ import com.github.mikephil.charting.components.AxisBase
 class GeneralDataFragment : Fragment() {
 
     // 0 = total notifications, 1 = days of week, 2 = hours of day
+    // Note, hours of the day, is disabled
     private var currentDropDownChoice: Int = 0
     private lateinit var spinner: Spinner
     private lateinit var pieChart: PieChart
@@ -79,6 +80,8 @@ class GeneralDataFragment : Fragment() {
                 dayNotificationData = LineDataSet(entries, "Days of the Week")
             }
             lineChart.setData(LineData(dayNotificationData))
+            lineChart.xAxis.valueFormatter = dayXAxisFormatter
+            lineChart.invalidate()
         } else if (currentDropDownChoice == 2) {
             if (hourNotificationData == null) {
                 val dbHandler = DBHandler(context!!)
@@ -86,6 +89,8 @@ class GeneralDataFragment : Fragment() {
                 hourNotificationData = LineDataSet(entries, "Hours of the Day")
             }
             lineChart.setData(LineData(hourNotificationData))
+            lineChart.xAxis.valueFormatter = hourXAxisFormatter
+            lineChart.invalidate()
         }
     }
 
