@@ -7,24 +7,22 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.yeet.notified.Models.NotificationReceived
 import com.yeet.notified.Models.NotifcationRemoved
 
-private val DATABASE_VERSION = 1
-private val DATABASE_NAME = "Notified.db"
+private const val DATABASE_VERSION = 1
+private const val DATABASE_NAME = "Notified.db"
+private const val TABLE_NOTIFICATION_RECEIVED = "notification_received"
+private const val COL_ID = "id"
+private const val COL_KEY = "key"
+private const val COL_PACKAGE_NAME = "package_name"
+private const val COL_POST_TIME = "post_time"
+private const val COL_TICKER_TEXT = "ticker_text"
+private const val COL_TITLE = "title"
+private const val COL_TEXT = "text"
+private const val COL_PRIORITY = "priority"
+private const val COL_CATEGORY = "category"
+private const val TABLE_NOTIFICATION_REMOVED = "notification_removed"
+private const val TABLE_SMS_NOTIFICATION = "sms_notification"
 
 class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
-
-
-    private val TABLE_NOTIFICATION_RECEIVED = "notification_received"
-    private val COL_ID = "id"
-    private val COL_KEY = "key"
-    private val COL_PACKAGE_NAME = "package_name"
-    private val COL_POST_TIME = "post_time"
-    private val COL_TICKER_TEXT = "ticker_text"
-    private val COL_TITLE = "title"
-    private val COL_TEXT = "text"
-    private val COL_PRIORITY = "priority"
-    private val COL_CATEGORY = "category"
-    private val TABLE_NOTIFICATION_REMOVED = "notification_removed"
-    private val TABLE_SMS_NOTIFICATION = "sms_notification"
 
     override fun onCreate(db: SQLiteDatabase?) {
 
