@@ -19,7 +19,6 @@ class NotificationService : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
-        Log.d("FUCK", "Here?")
         super.onNotificationPosted(sbn)
 
         // Disregard any ongoing notifications, like Spotify
@@ -45,7 +44,6 @@ class NotificationService : NotificationListenerService() {
         intent.putExtra("priority", priority)
         intent.putExtra("category", category)
 
-        Log.d("FUCK", intent.extras.toString())
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
 

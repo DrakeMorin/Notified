@@ -86,8 +86,6 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         val db = writableDatabase
 
         val lon = db.insert(TABLE_NOTIFICATION_RECEIVED, null, values)
-        Log.d("FUCK", lon.toString())
-        Log.d("FUCK", notification.appName)
         db.close()
     }
 

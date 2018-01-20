@@ -89,7 +89,6 @@ class MainActivity : AppCompatActivity() {
     private val onNotificationReceived = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            Log.d("FUCK", "HERE WE AREEEEE!!!!!")
             val appName = Utility.getAppName(intent.getStringExtra("packageName"), applicationContext)
             val notificationReceived = Utility.createNotificationReceived(intent, appName)
             val dbHandler = DBHandler(context)
