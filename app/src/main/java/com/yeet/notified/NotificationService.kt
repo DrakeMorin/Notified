@@ -6,6 +6,7 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
+import java.util.*
 
 
 class NotificationService : NotificationListenerService() {
@@ -32,6 +33,7 @@ class NotificationService : NotificationListenerService() {
         val text = extras?.getCharSequence("android.text")?.toString()
         val priority = sbn?.notification?.priority
         val category = sbn?.notification?.category
+        val dayOfTheWeek = Date(postTime!!).day
 
 
         val intent = Intent("NotifiedNotificationReceived")
@@ -42,7 +44,8 @@ class NotificationService : NotificationListenerService() {
         intent.putExtra("title", title)
         intent.putExtra("text", text)
         intent.putExtra("priority", priority)
-        //intent.putExtra("category", category)
+        intent.putExtra("dayOfWeek", dayOfTheWeek)
+        intent.putExtra("category", category)
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
@@ -72,7 +75,7 @@ class NotificationService : NotificationListenerService() {
         intent.putExtra("title", title)
         intent.putExtra("text", text)
         intent.putExtra("priority", priority)
-        //intent.putExtra("category", category)
+        intent.putExtra("category", category)
         intent.putExtra("removalReason", reason)
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)

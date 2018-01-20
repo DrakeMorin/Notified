@@ -1,5 +1,7 @@
 package com.yeet.notified.Models
 
+import java.time.DayOfWeek
+
 /**
  * Created by jacobsteves on 2018-01-20.
  */
@@ -11,7 +13,7 @@ class NotificationRemoved(
         val title: String,
         val text: String,
         val priority: Int,
-        //val category: String,
+        val category: String,
         val appName: String,
-        val removalReason: Int) {
-}
+        val dayOfWeek: Int,
+        val removalReason: Int)

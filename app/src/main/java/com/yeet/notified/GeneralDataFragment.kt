@@ -80,7 +80,7 @@ class GeneralDataFragment : Fragment() {
                 dayNotificationData = LineDataSet(entries, "Days of the Week")
             }
             lineChart.setData(LineData(dayNotificationData))
-            lineChart.xAxis.valueFormatter = dayXAxisFormatter
+            //lineChart.xAxis.valueFormatter = dayXAxisFormatter
             lineChart.invalidate()
         } else if (currentDropDownChoice == 2) {
             if (hourNotificationData == null) {
