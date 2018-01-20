@@ -1,8 +1,11 @@
 package com.yeet.notified
 
+import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.yeet.notified.Models.NotificationReceived
+import com.yeet.notified.Models.NotifcationRemoved
 
 private val DATABASE_VERSION = 1
 private val DATABASE_NAME = "Notified.db"
@@ -59,5 +62,40 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         db?.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATION_REMOVED)
         db?.execSQL("DROP TABLE IF EXISTS " + TABLE_SMS_NOTIFICATION)
         onCreate(db)
+    }
+
+    fun insertNotificationReceived(notification: NotificationReceived) {
+        val values = ContentValues()
+
+        values.put(COL_KEY, notification.key)
+        values.put(COL_PACKAGE_NAME, notification.packageName)
+        values.put(COL_POST_TIME, notification.postTime)
+        values.put(COL_TICKER_TEXT, notification.tickerText)
+        values.put(COL_TITLE, notification.title)
+        values.put(COL_TEXT, notification.text)
+        values.put(COL_PRIORITY, notification.priority)
+
+        val db = writableDatabase
+
+        db.insert(TABLE_NOTIFICATION_RECEIVED, null, values)
+        db.close()
+    }
+
+    fun insertNotificationRemoved(notification: NotifcationRemoved) {
+        val values = ContentValues()
+
+        values.put(COL_KEY, notification.key)
+        values.put(COL_PACKAGE_NAME, notification.packageName)
+        values.put(COL_POST_TIME, notification.postTime)
+        values.put(COL_TICKER_TEXT, notification.tickerText)
+        values.put(COL_TITLE, notification.title)
+        values.put(COL_TEXT, notification.text)
+        values.put(COL_PRIORITY, notification.priority)
+        values.put(COL_CATEGORY, notification.category)
+
+        val db = writableDatabase
+
+        db.insert(TABLE_NOTIFICATION_RECEIVED, null, values)
+        db.close()
     }
 }
