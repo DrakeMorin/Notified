@@ -75,14 +75,14 @@ class GeneralDataFragment : Fragment() {
         } else if (currentDropDownChoice == 1) {
             if (dayNotificationData == null) {
                 val dbHandler = DBHandler(context!!)
-                val entries = cursorToDayEntries(dbHandler.getMostPopularTime(true, true, null))
+                val entries = dbHandler.getMostPopularTime(true, true, null)
                 dayNotificationData = LineDataSet(entries, "Days of the Week")
             }
             lineChart.setData(LineData(dayNotificationData))
         } else if (currentDropDownChoice == 2) {
             if (hourNotificationData == null) {
                 val dbHandler = DBHandler(context!!)
-                val entries = cursorToHourEntries(dbHandler.getMostPopularTime(false, true, null))
+                val entries = dbHandler.getMostPopularTime(false, true, null)
                 hourNotificationData = LineDataSet(entries, "Hours of the Day")
             }
             lineChart.setData(LineData(hourNotificationData))
@@ -92,8 +92,10 @@ class GeneralDataFragment : Fragment() {
     private fun configureViews() {
         if (currentDropDownChoice == 0) {
             lineChart.visibility = View.GONE
+            pieChart.visibility = View.VISIBLE
         } else {
             pieChart.visibility = View.GONE
+            lineChart.visibility = View.VISIBLE
         }
     }
 
@@ -109,18 +111,6 @@ class GeneralDataFragment : Fragment() {
 
             }
         }
-    }
-
-    fun cursorToDayEntries(cursor: Cursor): List<Entry> {
-        val entries: ArrayList<Entry> = ArrayList()
-
-        return entries
-    }
-
-    fun cursorToHourEntries(cursor: Cursor): List<Entry> {
-        val entries: ArrayList<Entry> = ArrayList()
-
-        return entries
     }
 
 

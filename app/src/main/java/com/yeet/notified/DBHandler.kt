@@ -198,7 +198,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     // NOTE: Caller MUST close return value
-    fun getMostPopularTime(isDay: Boolean, isAsc: Boolean, appName: String?): Cursor {
+    fun getMostPopularTime(isDay: Boolean, isAsc: Boolean, appName: String?): ArrayList<Entry> {
         val db = readableDatabase
         val sort = if (isAsc) "ASC" else "DESC"
         val day = if (isDay) "DAYNAME($COL_POST_TIME)" else "HOUR($COL_POST_TIME)"
@@ -206,10 +206,11 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
 
         val rawSql = "SELECT $day, COUNT($day) FROM $TABLE_NOTIFICATION_RECEIVED $where GROUP BY $day ORDER BY COUNT($day) $sort"
         val cursor = db.rawQuery(rawSql, null)
-
+        var entries: ArrayList<Entry> = getEntryListFromCursor(cursor)
+        cursor.close()
         db.close()
 
-        return cursor
+        return entries
     }
 
     fun getAllAppNames(): ArrayList<String> {

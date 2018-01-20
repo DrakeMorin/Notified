@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         navBarSettings = findViewById(R.id.nav_bar_settings)
         if (savedInstanceState != null) navBarCurrent = savedInstanceState.getInt("NavBarCurrent", 0)
         setUpNavBar()
+        openNavFragment()
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle?) {
@@ -48,21 +49,25 @@ class MainActivity : AppCompatActivity() {
             resetNavBar()
             navBarCurrent = 0
             colourNavBar(navBarCurrent)
+            openNavFragment()
         })
         navBarPopular.setOnClickListener({
             resetNavBar()
             navBarCurrent = 1
             colourNavBar(navBarCurrent)
+            openNavFragment()
         })
         navBarSms.setOnClickListener({
             resetNavBar()
             navBarCurrent = 2
             colourNavBar(navBarCurrent)
+            openNavFragment()
         })
         navBarSettings.setOnClickListener({
             resetNavBar()
             navBarCurrent = 3
             colourNavBar(navBarCurrent)
+            openNavFragment()
         })
     }
 
@@ -83,6 +88,24 @@ class MainActivity : AppCompatActivity() {
         navBarPopular.setImageDrawable(getDrawable(R.drawable.ic_popular_black))
         navBarSms.setImageDrawable(getDrawable(R.drawable.ic_sms_black))
         navBarSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_black))
+    }
+
+    private fun openNavFragment() {
+        val fragmentManager = supportFragmentManager
+        val ft = fragmentManager.beginTransaction()
+        val fragment = GeneralDataFragment.newInstance()
+        if (navBarCurrent == 0) {
+
+        } else if (navBarCurrent == 1) {
+
+        } else if (navBarCurrent == 2) {
+
+        } else if (navBarCurrent == 3) {
+
+        }
+        ft.replace(R.id.container, fragment)
+        ft.commit()
+
     }
 
     private val onNotificationReceived = object : BroadcastReceiver() {
