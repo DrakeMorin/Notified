@@ -2,6 +2,7 @@ package com.yeet.notified
 
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.yeet.notified.Models.NotificationReceived
@@ -103,7 +104,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     // NOTE: Caller MUST close return value
-    private fun getLastNDaysData(days: int) {
+    private fun getLastNDaysData(days: Int): Cursor {
         val db = readableDatabase
 
         val cursor = db.query(
@@ -122,17 +123,17 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     // NOTE: Caller MUST close return value
-    fun getLastWeekData() {
+    fun getLastWeekData(): Cursor {
         return getLastNDaysData(7)
     }
 
     // NOTE: Caller MUST close return value
-    fun getLastDayData() {
+    fun getLastDayData(): Cursor {
         return getLastNDaysData(1)
     }
 
     // NOTE: Caller MUST close return value
-    fun getMostFrequent(category: String, isAsc: Boolean) {
+    fun getMostFrequent(category: String, isAsc: Boolean): Cursor {
         val db = readableDatabase
         val sort = if (isAsc) "ASC" else "DESC"
 
@@ -145,7 +146,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     // NOTE: Caller MUST close return value
-    fun getMostPopularTime(isDay: Boolean, isAsc: Boolean) {
+    fun getMostPopularTime(isDay: Boolean, isAsc: Boolean): Cursor {
         val db = readableDatabase
         val sort = if (isAsc) "ASC" else "DESC"
         val day = if (isDay) "DAYNAME($COL_POST_TIME)" else "HOUR($COL_POST_TIME)"
