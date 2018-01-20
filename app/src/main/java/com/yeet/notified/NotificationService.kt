@@ -44,5 +44,5 @@ class NotificationService : NotificationListenerService() {
         super.onNotificationRemoved(sbn)
         Log.i("Msg", "Notification Removed");
     }
-    
+
 }
