@@ -20,29 +20,63 @@ class NotificationService : NotificationListenerService() {
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
-        val pack = sbn?.getPackageName()
-        val ticker = sbn?.getNotification()?.tickerText.toString()
-        val extras = sbn?.getNotification()?.extras
+
+        // Disregard any ongoing notifications, like Spotify
+        if (sbn?.isOngoing == true) return
+        val key = sbn?.key
+        val packageName = sbn?.packageName
+        val postTime = sbn?.postTime
+        val tickerText = sbn?.notification?.tickerText.toString()
+        val extras = sbn?.notification?.extras
         val title = extras?.getString("android.title")
-        val text = extras?.getCharSequence("android.text")!!.toString()
+        val text = extras?.getCharSequence("android.text")?.toString()
+        val priority = sbn?.notification?.priority
+        val category = sbn?.notification?.category
 
-        Log.i("Package", pack)
-        Log.i("Ticker", ticker)
-        Log.i("Title", title)
-        Log.i("Text", text)
 
-        val msgrcv = Intent("Msg")
-        msgrcv.putExtra("package", pack)
-        msgrcv.putExtra("ticker", ticker)
-        msgrcv.putExtra("title", title)
-        msgrcv.putExtra("text", text)
+        val intent = Intent("NotifiedNotificationReceived")
+        intent.putExtra("key", key)
+        intent.putExtra("packageName", packageName)
+        intent.putExtra("postTime", postTime)
+        intent.putExtra("tickerText", tickerText)
+        intent.putExtra("title", title)
+        intent.putExtra("text", text)
+        intent.putExtra("priority", priority)
+        intent.putExtra("category", category)
 
-        LocalBroadcastManager.getInstance(context).sendBroadcast(msgrcv)
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
 
-    override fun onNotificationRemoved(sbn: StatusBarNotification?) {
-        super.onNotificationRemoved(sbn)
-        Log.i("Msg", "Notification Removed");
+
+    override fun onNotificationRemoved(sbn: StatusBarNotification?, rankingMap: RankingMap?, reason: Int) {
+        super.onNotificationRemoved(sbn, rankingMap, reason)
+        // Disregard any ongoing notifications, like Spotify
+        if (sbn?.isOngoing == true) return
+        val key = sbn?.key
+        val packageName = sbn?.packageName
+        val postTime = sbn?.postTime
+        val tickerText = sbn?.notification?.tickerText.toString()
+        val extras = sbn?.notification?.extras
+        val title = extras?.getString("android.title")
+        val text = extras?.getCharSequence("android.text")?.toString()
+        val priority = sbn?.notification?.priority
+        val category = sbn?.notification?.category
+
+
+
+        val intent = Intent("NotifiedNotificationRemoved")
+        intent.putExtra("key", key)
+        intent.putExtra("packageName", packageName)
+        intent.putExtra("postTime", postTime)
+        intent.putExtra("tickerText", tickerText)
+        intent.putExtra("title", title)
+        intent.putExtra("text", text)
+        intent.putExtra("priority", priority)
+        intent.putExtra("category", category)
+        intent.putExtra("removalReason", reason)
+
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
+
 
 }

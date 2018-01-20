@@ -5,7 +5,7 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.yeet.notified.Models.NotificationReceived
-import com.yeet.notified.Models.NotifcationRemoved
+import com.yeet.notified.Models.NotificationRemoved
 
 private const val DATABASE_VERSION = 1
 private const val DATABASE_NAME = "Notified.db"
@@ -20,6 +20,7 @@ private const val COL_TEXT = "text"
 private const val COL_PRIORITY = "priority"
 private const val COL_CATEGORY = "category"
 private const val TABLE_NOTIFICATION_REMOVED = "notification_removed"
+private const val COL_REMOVAL_REASON = "removal_reason"
 private const val TABLE_SMS_NOTIFICATION = "sms_notification"
 
 class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
@@ -35,7 +36,8 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
                 $COL_TICKER_TEXT TEXT,
                 $COL_TITLE TEXT,
                 $COL_TEXT TEXT,
-                $COL_PRIORITY INTEGER)
+                $COL_PRIORITY INTEGER,
+                $COL_CATEGORY TEXT)
                 """
         )
 
@@ -49,7 +51,8 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
                 $COL_TITLE TEXT,
                 $COL_TEXT TEXT,
                 $COL_PRIORITY INTEGER,
-                $COL_CATEGORY TEXT)
+                $COL_CATEGORY TEXT,
+                $COL_REMOVAL_REASON INTEGER)
                 """
         )
     }
@@ -72,6 +75,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(COL_TITLE, notification.title)
         values.put(COL_TEXT, notification.text)
         values.put(COL_PRIORITY, notification.priority)
+        values.put(COL_CATEGORY, notification.category)
 
         val db = writableDatabase
 
@@ -79,7 +83,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         db.close()
     }
 
-    fun insertNotificationRemoved(notification: NotifcationRemoved) {
+    fun insertNotificationRemoved(notification: NotificationRemoved) {
         val values = ContentValues()
 
         values.put(COL_KEY, notification.key)
@@ -90,6 +94,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(COL_TEXT, notification.text)
         values.put(COL_PRIORITY, notification.priority)
         values.put(COL_CATEGORY, notification.category)
+        values.put(COL_REMOVAL_REASON, notification.removalReason)
 
         val db = writableDatabase
 

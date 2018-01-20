@@ -3,7 +3,7 @@ package com.yeet.notified.Models
 /**
  * Created by jacobsteves on 2018-01-20.
  */
-class NotifcationRemoved(
+class NotificationRemoved(
         val key: String,
         val packageName: String,
         val postTime: Long,
@@ -11,6 +11,6 @@ class NotifcationRemoved(
         val title: String,
         val text: String,
         val priority: Int,
-        val category: String
-) {
+        val category: String,
+        val removalReason: Int) {
 }
