@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import com.crashlytics.android.Crashlytics;
+import com.yeet.notified.Models.NotificationDataBuilder
 import io.fabric.sdk.android.Fabric;
 
 

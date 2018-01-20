@@ -101,4 +101,61 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         db.insert(TABLE_NOTIFICATION_RECEIVED, null, values)
         db.close()
     }
+
+    // NOTE: Caller MUST close return value
+    private fun getLastNDaysData(days: int) {
+        val db = readableDatabase
+
+        val cursor = db.query(
+                TABLE_NOTIFICATION_RECEIVED,
+                null,
+                "$COL_POST_TIME >= DATEADD(day,-$days, GETDATE())",
+                null,
+                null,
+                "$COL_POST_TIME DESC",
+                null
+        )
+
+        db.close()
+
+        return cursor
+    }
+
+    // NOTE: Caller MUST close return value
+    fun getLastWeekData() {
+        return getLastNDaysData(7)
+    }
+
+    // NOTE: Caller MUST close return value
+    fun getLastDayData() {
+        return getLastNDaysData(1)
+    }
+
+    // NOTE: Caller MUST close return value
+    fun getMostFrequent(category: String, isAsc: Boolean) {
+        val db = readableDatabase
+        val sort = if (isAsc) "ASC" else "DESC"
+
+        val rawSql = "SELECT $category, COUNT($category) FROM $TABLE_NOTIFICATION_RECEIVED GROUP BY $category ORDER BY COUNT($category) $sort"
+        val cursor = db.rawQuery(rawSql, null)
+
+        db.close()
+
+        return cursor
+    }
+
+    // NOTE: Caller MUST close return value
+    fun getMostPopularTime(isDay: Boolean, isAsc: Boolean) {
+        val db = readableDatabase
+        val sort = if (isAsc) "ASC" else "DESC"
+        val day = if (isDay) "DAYNAME($COL_POST_TIME)" else "HOUR($COL_POST_TIME)"
+
+        val rawSql = "SELECT $day, COUNT($day) FROM $TABLE_NOTIFICATION_RECEIVED GROUP BY $day ORDER BY COUNT($day) $sort"
+        val cursor = db.rawQuery(rawSql, null)
+
+        db.close()
+
+        return cursor
+    }
+
 }
