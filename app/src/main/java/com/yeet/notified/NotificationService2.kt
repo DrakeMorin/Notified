@@ -5,13 +5,11 @@ import android.content.Intent
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.support.v4.content.LocalBroadcastManager
-import android.util.Log
 import java.util.*
 
 
 class NotificationService2 : NotificationListenerService() {
 
-    private val TAG: String = this.javaClass.simpleName
     private lateinit var context: Context
 
     override fun onCreate() {

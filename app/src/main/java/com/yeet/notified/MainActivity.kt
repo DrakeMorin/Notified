@@ -7,17 +7,16 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.ImageButton
-import com.crashlytics.android.Crashlytics;
-import io.fabric.sdk.android.Fabric;
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var navBarGeneral: ImageButton
     private lateinit var navBarPopular: ImageButton
-    private lateinit var navBarSms: ImageButton
+    //private lateinit var navBarSms: ImageButton
     private lateinit var navBarSettings: ImageButton
     private var navBarCurrent: Int = 0
 
@@ -25,11 +24,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationReceived, IntentFilter("NotifiedNotificationReceived"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationReceived, IntentFilter("NotifiedNotificationReceived"))
         //LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationRemoved, IntentFilter("NotifiedNotificationRemoved"));
         navBarGeneral = findViewById(R.id.nav_bar_general)
         navBarPopular = findViewById(R.id.nav_bar_popular)
-        navBarSms = findViewById(R.id.nav_bar_sms)
+        //navBarSms = findViewById(R.id.nav_bar_sms)
         navBarSettings = findViewById(R.id.nav_bar_settings)
         if (savedInstanceState != null) navBarCurrent = savedInstanceState.getInt("NavBarCurrent", 0)
         setUpNavBar()
@@ -58,54 +57,55 @@ class MainActivity : AppCompatActivity() {
             colourNavBar(navBarCurrent)
             openNavFragment()
         })
-        navBarSms.setOnClickListener({
+        /*navBarSms.setOnClickListener({
             resetNavBar()
             navBarCurrent = 2
             colourNavBar(navBarCurrent)
             openNavFragment()
-        })
+        })*/
         navBarSettings.setOnClickListener({
             resetNavBar()
-            navBarCurrent = 3
+            navBarCurrent = 2
             colourNavBar(navBarCurrent)
             openNavFragment()
         })
     }
 
     private fun colourNavBar(item: Int) {
-        if (item == 0) {
-            navBarGeneral.setImageDrawable(getDrawable(R.drawable.ic_general_blue))
-        } else if (item == 1) {
-            navBarPopular.setImageDrawable(getDrawable(R.drawable.ic_popular_blue))
-        } else if (item == 2) {
-            navBarSms.setImageDrawable(getDrawable(R.drawable.ic_sms_blue))
-        } else if (item == 3) {
-            navBarSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_blue))
+        when (item) {
+            0 -> navBarGeneral.setImageDrawable(getDrawable(R.drawable.ic_general_blue))
+            1 -> navBarPopular.setImageDrawable(getDrawable(R.drawable.ic_popular_blue))
+            //2 -> navBarSms.setImageDrawable(getDrawable(R.drawable.ic_sms_blue))
+            2 -> navBarSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_blue))
         }
     }
 
     private fun resetNavBar() {
         navBarGeneral.setImageDrawable(getDrawable(R.drawable.ic_general_black))
         navBarPopular.setImageDrawable(getDrawable(R.drawable.ic_popular_black))
-        navBarSms.setImageDrawable(getDrawable(R.drawable.ic_sms_black))
+        //navBarSms.setImageDrawable(getDrawable(R.drawable.ic_sms_black))
         navBarSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_black))
     }
 
     private fun openNavFragment() {
         val fragmentManager = supportFragmentManager
         val ft = fragmentManager.beginTransaction()
-        val fragment = GeneralDataFragment.newInstance()
-        if (navBarCurrent == 0) {
+        when (navBarCurrent) {
+            0 -> {
+                val fragment = GeneralDataFragment.newInstance()
+                ft.replace(R.id.container, fragment)
+                ft.commit()
+            }
+            1 -> {
+                val fragment = PerAppDataFragment()
+                ft.replace(R.id.container, fragment)
+                ft.commit()
+            }
+            2 -> {
 
-        } else if (navBarCurrent == 1) {
-
-        } else if (navBarCurrent == 2) {
-
-        } else if (navBarCurrent == 3) {
-
+            }
         }
-        ft.replace(R.id.container, fragment)
-        ft.commit()
+
 
     }
 

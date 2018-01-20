@@ -36,13 +36,13 @@
             android:layout_weight="1"
             android:src="@drawable/ic_popular_black" />
 
-        <ImageButton
+        <!--<ImageButton
             android:id="@+id/nav_bar_sms"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_weight="1"
-            android:src="@drawable/ic_sms_black" />
+            android:src="@drawable/ic_sms_black" />-->
 
         <ImageButton
             android:id="@+id/nav_bar_settings"

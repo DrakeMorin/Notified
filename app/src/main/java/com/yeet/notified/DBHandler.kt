@@ -3,6 +3,7 @@ package com.yeet.notified
 import android.content.ContentValues
 import android.content.Context
 import android.database.Cursor
+import android.database.DatabaseUtils
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
@@ -94,6 +95,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
             val appName = cursor.getString(cursor.getColumnIndex(COL_APP_NAME))
             val appCount = cursor.getString(cursor.getColumnIndex("count"))
             val percentage = (java.lang.Float.parseFloat(appCount) / total) * 100
+            Log.d("App thing:", appName + " " + percentage + " " + appCount + " / " + total)
             entries.add(PieEntry(percentage, appName))
             cursor.moveToNext()
         }
@@ -140,7 +142,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     fun getMostFrequent(category: String, isAsc: Boolean, appName: String?): Cursor {
         val db = readableDatabase
         val sort = if (isAsc) "ASC" else "DESC"
-        val where = if (appName != null) "WHERE $COL_APP_NAME = $appName" else ""
+        val where = if (appName != null) "WHERE $COL_APP_NAME = '$appName'" else null
 
         val rawSql = "SELECT $category, COUNT($category) FROM $TABLE_NOTIFICATION_RECEIVED $where GROUP BY $category ORDER BY COUNT($category) $sort"
         val cursor = db.rawQuery(rawSql, null)
@@ -153,7 +155,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     // NOTE: Caller MUST close return value
     fun getMostPopularTime(isDay: Boolean, isAsc: Boolean, appName: String?): ArrayList<Entry> {
         val db = readableDatabase
-        val where = if (appName != null) "$COL_APP_NAME = $appName" else null
+        val where = if (appName != null) "$COL_APP_NAME = '$appName'" else null
         val cursor = db.query(TABLE_NOTIFICATION_RECEIVED, null, where, null, null, null, null)
         val entries: ArrayList<Entry> = getEntryListFromCursor(cursor)
         cursor.close()
@@ -164,10 +166,10 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
 
     fun getPieGraph(): ArrayList<PieEntry> {
         val db = readableDatabase
-        val rawQuery = "SELECT *, COUNT(DISTINCT $COL_APP_NAME) as count FROM $TABLE_NOTIFICATION_RECEIVED ORDER BY count DESC"
+        val rawQuery = "SELECT $COL_APP_NAME, COUNT($COL_APP_NAME) as count FROM $TABLE_NOTIFICATION_RECEIVED GROUP BY $COL_APP_NAME"
         val cursor = db.rawQuery(rawQuery, null)
-        val cursorToCount = db.query(TABLE_NOTIFICATION_RECEIVED, null, null, null, null, null, null, null, null, null)
-        val count = cursortToCount.getCount()
+        val cursorToCount = db.query(TABLE_NOTIFICATION_RECEIVED, null, null, null, null, null, null, null)
+        val count = cursorToCount.count
         val entries: ArrayList<PieEntry> = getEntryPercentFromCursor(cursor, count)
 
         cursor.close()

@@ -1,9 +1,7 @@
 package com.yeet.notified
 
-import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +9,11 @@ import android.widget.AdapterView
 import android.widget.Spinner
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
-import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
-import com.github.mikephil.charting.components.AxisBase
 
 
 
@@ -36,7 +33,7 @@ class GeneralDataFragment : Fragment() {
             "13:00 - 14:00", "14:00 - 15:00", "15:00 - 16:00", "16:00 - 17:00", "17:00 - 18:00", "19:00 - 20:00", "20:00 - 21:00",
             "21:00 - 22:00", "22:00 - 23:00", "23:00 - 00:00")
 
-    private var totalNotificationData: LineDataSet? = null
+    private var totalNotificationData: PieDataSet? = null
     private var dayNotificationData: LineDataSet? = null
     private var hourNotificationData: LineDataSet? = null
 
@@ -71,9 +68,13 @@ class GeneralDataFragment : Fragment() {
     private fun configureData() {
         if (currentDropDownChoice == 0) {
             if (totalNotificationData == null) {
-
-
+                val dbHandler = DBHandler(context!!)
+                val entries = dbHandler.getPieGraph()
+                if (entries.size < 1) return
+                totalNotificationData = PieDataSet(entries, "Breakdown of Notifications")
             }
+            pieChart.setData(PieData(totalNotificationData))
+            pieChart.invalidate()
         } else if (currentDropDownChoice == 1) {
             if (dayNotificationData == null) {
                 val dbHandler = DBHandler(context!!)
