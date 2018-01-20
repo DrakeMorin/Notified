@@ -1,27 +1,35 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.yeet.notified.GeneralDataFragment"
+    tools:context="com.yeet.notified.PerAppDataFragment"
     android:orientation="vertical">
 
+    <Spinner
+        android:id="@+id/spinner_app_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <Spinner
-        android:id="@+id/spinner_general_data"
+        android:id="@+id/spinner_data_type"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/general_data_spinner_options"/>
 
 
     <com.github.mikephil.charting.charts.PieChart
-        android:id="@+id/pie_chart_general_data"
+        android:id="@+id/pie_chart_per_app"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
 
+
     <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/line_chart_general_data"
+        android:id="@+id/line_chart_per_app"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone"/>
+
 </LinearLayout>
