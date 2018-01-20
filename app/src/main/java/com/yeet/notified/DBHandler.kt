@@ -5,6 +5,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import com.yeet.notified.Models.NotificationReceived
 import com.yeet.notified.Models.NotificationRemoved
 
@@ -84,7 +85,9 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
 
         val db = writableDatabase
 
-        db.insert(TABLE_NOTIFICATION_RECEIVED, null, values)
+        val lon = db.insert(TABLE_NOTIFICATION_RECEIVED, null, values)
+        Log.d("FUCK", lon.toString())
+        Log.d("FUCK", notification.appName)
         db.close()
     }
 

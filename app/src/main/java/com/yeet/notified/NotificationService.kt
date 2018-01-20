@@ -19,10 +19,11 @@ class NotificationService : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
+        Log.d("FUCK", "Here?")
         super.onNotificationPosted(sbn)
 
         // Disregard any ongoing notifications, like Spotify
-        if (sbn?.isOngoing == true) return
+        //if (sbn?.isOngoing == true) return
         val key = sbn?.key
         val packageName = sbn?.packageName
         val postTime = sbn?.postTime
@@ -44,6 +45,7 @@ class NotificationService : NotificationListenerService() {
         intent.putExtra("priority", priority)
         intent.putExtra("category", category)
 
+        Log.d("FUCK", intent.extras.toString())
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
 
@@ -51,7 +53,7 @@ class NotificationService : NotificationListenerService() {
     override fun onNotificationRemoved(sbn: StatusBarNotification?, rankingMap: RankingMap?, reason: Int) {
         super.onNotificationRemoved(sbn, rankingMap, reason)
         // Disregard any ongoing notifications, like Spotify
-        if (sbn?.isOngoing == true) return
+        //if (sbn?.isOngoing == true) return
         val key = sbn?.key
         val packageName = sbn?.packageName
         val postTime = sbn?.postTime
