@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
 import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.PieEntry
 import com.yeet.notified.Models.NotificationReceived
 import com.yeet.notified.Models.NotificationRemoved
 
@@ -84,6 +85,22 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         db.close()
     }
 
+    private fun getEntryPercentFromCursor(cursor: Cursor, total: Int): ArrayList<PieEntry> {
+        if (cursor.count == 0) return arrayListOf()
+        val entries: ArrayList<PieEntry> = ArrayList()
+        cursor.moveToFirst()
+
+        while(!cursor.isAfterLast) {
+            val appName = cursor.getString(cursor.getColumnIndex(COL_APP_NAME))
+            val appCount = cursor.getString(cursor.getColumnIndex("count"))
+            val percentage = (java.lang.Float.parseFloat(appCount) / total) * 100
+            entries.add(PieEntry(percentage, appName))
+            cursor.moveToNext()
+        }
+
+        return entries
+    }
+
     private fun getEntryListFromCursor(cursor: Cursor): ArrayList<Entry> {
         if (cursor.count == 0) return arrayListOf()
         var entries: ArrayList<Entry> = ArrayList()
@@ -136,17 +153,26 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     // NOTE: Caller MUST close return value
     fun getMostPopularTime(isDay: Boolean, isAsc: Boolean, appName: String?): ArrayList<Entry> {
         val db = readableDatabase
-        val sort = if (isAsc) "ASC" else "DESC"
-        //val day = if (isDay)
-//        val day = if (isDay) "strftime('%w', $COL_POST_TIME, 'unixepoch')" else "strftime('%H', $COL_POST_TIME, 'unixepoch')"
-        val where = if (appName != null) "WHERE $COL_APP_NAME = $appName" else ""
-        //val rawSql = "SELECT $COL_DAY_OF_WEEK FROM $TABLE_NOTIFICATION_RECEIVED"
-        val column = arrayOf(COL_DAY_OF_WEEK)
-        val cursor = db.query(TABLE_NOTIFICATION_RECEIVED, null, null, null, null, null, null)//db.rawQuery(rawSql, null)
+        val where = if (appName != null) "$COL_APP_NAME = $appName" else null
+        val cursor = db.query(TABLE_NOTIFICATION_RECEIVED, null, where, null, null, null, null)
         val entries: ArrayList<Entry> = getEntryListFromCursor(cursor)
         cursor.close()
         db.close()
 
+        return entries
+    }
+
+    fun getPieGraph(): ArrayList<PieEntry> {
+        val db = readableDatabase
+        val rawQuery = "SELECT *, COUNT(DISTINCT $COL_APP_NAME) as count FROM $TABLE_NOTIFICATION_RECEIVED ORDER BY count DESC"
+        val cursor = db.rawQuery(rawQuery, null)
+        val cursorToCount = db.query(TABLE_NOTIFICATION_RECEIVED, null, null, null, null, null, null, null, null, null)
+        val count = cursortToCount.getCount()
+        val entries: ArrayList<PieEntry> = getEntryPercentFromCursor(cursor, count)
+
+        cursor.close()
+        cursorToCount.close()
+        db.close()
         return entries
     }
 
