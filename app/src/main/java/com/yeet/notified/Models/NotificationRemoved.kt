@@ -12,5 +12,6 @@ class NotificationRemoved(
         val text: String,
         val priority: Int,
         val category: String,
+        val appName: String,
         val removalReason: Int) {
 }

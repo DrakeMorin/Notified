@@ -88,7 +88,8 @@ class MainActivity : AppCompatActivity() {
     private val onNotificationReceived = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            val notificationReceived = Utility.createNotificationReceived(intent)
+            val appName = Utility.getAppName(intent.getStringExtra("packageName"), applicationContext)
+            val notificationReceived = Utility.createNotificationReceived(intent, appName)
             val dbHandler = DBHandler(context)
             dbHandler.insertNotificationReceived(notificationReceived)
         }
@@ -97,7 +98,8 @@ class MainActivity : AppCompatActivity() {
     private val onNotificationRemoved = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            var notificationRemoved = Utility.createNotificationRemoved(intent)
+            val appName = Utility.getAppName(intent.getStringExtra("packageName"), applicationContext)
+            val notificationRemoved = Utility.createNotificationRemoved(intent, appName)
             val dbHandler = DBHandler(context)
             dbHandler.insertNotificationRemoved(notificationRemoved)
         }

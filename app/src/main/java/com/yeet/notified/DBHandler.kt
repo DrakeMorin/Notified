@@ -80,6 +80,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(COL_TEXT, notification.text)
         values.put(COL_PRIORITY, notification.priority)
         values.put(COL_CATEGORY, notification.category)
+        values.put(COL_APP_NAME, notification.appName)
 
         val db = writableDatabase
 
@@ -98,6 +99,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(COL_TEXT, notification.text)
         values.put(COL_PRIORITY, notification.priority)
         values.put(COL_CATEGORY, notification.category)
+        values.put(COL_APP_NAME, notification.appName)
         values.put(COL_REMOVAL_REASON, notification.removalReason)
 
         val db = writableDatabase
