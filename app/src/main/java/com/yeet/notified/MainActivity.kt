@@ -33,13 +33,16 @@ class MainActivity : AppCompatActivity() {
         navBarPopular = findViewById(R.id.nav_bar_popular)
         navBarSms = findViewById(R.id.nav_bar_sms)
         navBarSettings = findViewById(R.id.nav_bar_settings)
-        if (savedInstanceState != null) navBarCurrent = savedInstanceState.getInt("ActiveNavBar", 0)
+        if (savedInstanceState != null) navBarCurrent = savedInstanceState.getInt("NavBarCurrent", 0)
         setUpNavBar()
     }
 
-    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
-        //outState?.putInt("ActiveNavBar", navBarCurrent)
-        super.onSaveInstanceState(outState, outPersistentState)
+    override fun onSaveInstanceState(savedInstanceState: Bundle?) {
+        super.onSaveInstanceState(savedInstanceState)
+        // Save UI state changes to the savedInstanceState.
+        // This bundle will be passed to onCreate if the process is
+        // killed and restarted.
+        savedInstanceState?.putInt("NavBarCurrent", navBarCurrent)
     }
 
     private fun setUpNavBar() {
