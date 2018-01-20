@@ -167,12 +167,12 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         return cursor
     }
 
-    fun getAllAppNames(): List<String> {
+    fun getAllAppNames(): ArrayList<String> {
         val db = readableDatabase
         val rawSql = "SELECT DISTINCT $COL_APP_NAME FROM $TABLE_NOTIFICATION_RECEIVED"
         val cursor = db.rawQuery(rawSql, null)
 
-        if (cursor.count == 0) return emptyList()
+        if (cursor.count == 0) return arrayListOf()
         cursor.moveToFirst()
         val appNames: ArrayList<String> = ArrayList()
         while(!cursor.isAfterLast) {
