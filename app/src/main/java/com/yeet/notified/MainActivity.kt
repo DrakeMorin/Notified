@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -32,7 +33,13 @@ class MainActivity : AppCompatActivity() {
         navBarPopular = findViewById(R.id.nav_bar_popular)
         navBarSms = findViewById(R.id.nav_bar_sms)
         navBarSettings = findViewById(R.id.nav_bar_settings)
+        if (savedInstanceState != null) navBarCurrent = savedInstanceState.getInt("ActiveNavBar", 0)
         setUpNavBar()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, outPersistentState: PersistableBundle?) {
+        //outState?.putInt("ActiveNavBar", navBarCurrent)
+        super.onSaveInstanceState(outState, outPersistentState)
     }
 
     private fun setUpNavBar() {
