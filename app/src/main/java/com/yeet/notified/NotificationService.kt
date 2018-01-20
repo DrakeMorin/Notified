@@ -42,7 +42,7 @@ class NotificationService : NotificationListenerService() {
         intent.putExtra("title", title)
         intent.putExtra("text", text)
         intent.putExtra("priority", priority)
-        intent.putExtra("category", category)
+        //intent.putExtra("category", category)
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
@@ -72,7 +72,7 @@ class NotificationService : NotificationListenerService() {
         intent.putExtra("title", title)
         intent.putExtra("text", text)
         intent.putExtra("priority", priority)
-        intent.putExtra("category", category)
+        //intent.putExtra("category", category)
         intent.putExtra("removalReason", reason)
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)

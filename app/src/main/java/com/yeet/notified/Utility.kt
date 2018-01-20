@@ -30,8 +30,8 @@ class Utility {
             val title = intent.getStringExtra("title")
             val text = intent.getStringExtra("text")
             val priority = intent.getIntExtra("priority", 0)
-            val category = intent.getStringExtra("category")
-            return NotificationReceived(key, packageName, postTime, tickerText, title, text, priority, category, appName)
+            //val category = intent.getStringExtra("category")
+            return NotificationReceived(key, packageName, postTime, tickerText, title, text, priority, appName)
         }
         fun createNotificationRemoved(intent: Intent, appName: String): NotificationRemoved {
             val key = intent.getStringExtra("key")
@@ -41,9 +41,9 @@ class Utility {
             val title = intent.getStringExtra("title")
             val text = intent.getStringExtra("text")
             val priority = intent.getIntExtra("priority", -1)
-            val category = intent.getStringExtra("category")
+            //val category = intent.getStringExtra("category")
             val removalReason = intent.getIntExtra("removalReason", -1)
-            return NotificationRemoved(key, packageName, postTime, tickerText, title, text, priority, category, appName, removalReason)
+            return NotificationRemoved(key, packageName, postTime, tickerText, title, text, priority, appName, removalReason)
         }
     }
 }

@@ -11,6 +11,6 @@ class NotificationReceived(
         val title: String,
         val text: String,
         val priority: Int,
-        val category: String,
+        //val category: String,
         val appName: String) {
 }

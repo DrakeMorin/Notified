@@ -84,7 +84,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(COL_TITLE, notification.title)
         values.put(COL_TEXT, notification.text)
         values.put(COL_PRIORITY, notification.priority)
-        values.put(COL_CATEGORY, notification.category)
+        //values.put(COL_CATEGORY, notification.category)
         values.put(COL_APP_NAME, notification.appName)
 
         val db = writableDatabase
@@ -103,7 +103,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         values.put(COL_TITLE, notification.title)
         values.put(COL_TEXT, notification.text)
         values.put(COL_PRIORITY, notification.priority)
-        values.put(COL_CATEGORY, notification.category)
+        //values.put(COL_CATEGORY, notification.category)
         values.put(COL_APP_NAME, notification.appName)
         values.put(COL_REMOVAL_REASON, notification.removalReason)
 
@@ -114,6 +114,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     }
 
     private fun getEntryListFromCursor(cursor: Cursor): ArrayList<Entry> {
+        if (cursor.count == 0) return arrayListOf()
         var entries: ArrayList<Entry> = ArrayList()
         cursor.moveToFirst()
 
@@ -126,13 +127,13 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         var saturdayCount = 0f
 
         while(!cursor.isAfterLast) {
-            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "sunday") ++sundayCount
-            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "monday") ++mondayCount
-            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "tuesday") ++tuesdayCount
-            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "wednesday") ++wednesdayCount
-            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "thursday") ++thursdayCount
-            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "friday") ++fridayCount
-            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "saturday") ++saturdayCount
+            if (cursor.getString(cursor.getColumnIndex("count")) == "0") ++sundayCount
+            if (cursor.getString(cursor.getColumnIndex("count")) == "1") ++mondayCount
+            if (cursor.getString(cursor.getColumnIndex("count")) == "2") ++tuesdayCount
+            if (cursor.getString(cursor.getColumnIndex("count")) == "3") ++wednesdayCount
+            if (cursor.getString(cursor.getColumnIndex("count")) == "4") ++thursdayCount
+            if (cursor.getString(cursor.getColumnIndex("count")) == "5") ++fridayCount
+            if (cursor.getString(cursor.getColumnIndex("count")) == "6") ++saturdayCount
             cursor.moveToNext()
         }
 
@@ -201,11 +202,12 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     fun getMostPopularTime(isDay: Boolean, isAsc: Boolean, appName: String?): ArrayList<Entry> {
         val db = readableDatabase
         val sort = if (isAsc) "ASC" else "DESC"
-        val day = if (isDay) "DAYNAME($COL_POST_TIME)" else "HOUR($COL_POST_TIME)"
+        val day = if (isDay) "strftime('%w', $COL_POST_TIME)" else "strftime('%H', $COL_POST_TIME)"
         val where = if (appName != null) "WHERE $COL_APP_NAME = $appName" else ""
 
-        val rawSql = "SELECT $day, COUNT($day) FROM $TABLE_NOTIFICATION_RECEIVED $where GROUP BY $day ORDER BY COUNT($day) $sort"
+        val rawSql = "SELECT $day, COUNT($day) as count FROM $TABLE_NOTIFICATION_RECEIVED $where GROUP BY $day ORDER BY COUNT($day) $sort"
         val cursor = db.rawQuery(rawSql, null)
+        if (cursor.count == 0) return arrayListOf()
         var entries: ArrayList<Entry> = getEntryListFromCursor(cursor)
         cursor.close()
         db.close()
