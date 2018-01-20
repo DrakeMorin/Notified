@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Notified</string>
+
+    <string-array name="general_data_spinner_options">
+        <item>All Notifications</item>
+        <item>By Days of the Week</item>
+    </string-array>
 </resources>

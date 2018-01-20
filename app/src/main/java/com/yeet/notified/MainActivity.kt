@@ -5,13 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
-import android.view.View
+import android.util.Log
 import android.widget.ImageButton
 import com.crashlytics.android.Crashlytics;
-import com.yeet.notified.Models.NotificationDataBuilder
 import io.fabric.sdk.android.Fabric;
 
 
@@ -28,13 +26,14 @@ class MainActivity : AppCompatActivity() {
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationReceived, IntentFilter("NotifiedNotificationReceived"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationRemoved, IntentFilter("NotifiedNotificationRemoved"));
+        //LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationRemoved, IntentFilter("NotifiedNotificationRemoved"));
         navBarGeneral = findViewById(R.id.nav_bar_general)
         navBarPopular = findViewById(R.id.nav_bar_popular)
         navBarSms = findViewById(R.id.nav_bar_sms)
         navBarSettings = findViewById(R.id.nav_bar_settings)
         if (savedInstanceState != null) navBarCurrent = savedInstanceState.getInt("NavBarCurrent", 0)
         setUpNavBar()
+        openNavFragment()
     }
 
     override fun onSaveInstanceState(savedInstanceState: Bundle?) {
@@ -51,21 +50,25 @@ class MainActivity : AppCompatActivity() {
             resetNavBar()
             navBarCurrent = 0
             colourNavBar(navBarCurrent)
+            openNavFragment()
         })
         navBarPopular.setOnClickListener({
             resetNavBar()
             navBarCurrent = 1
             colourNavBar(navBarCurrent)
+            openNavFragment()
         })
         navBarSms.setOnClickListener({
             resetNavBar()
             navBarCurrent = 2
             colourNavBar(navBarCurrent)
+            openNavFragment()
         })
         navBarSettings.setOnClickListener({
             resetNavBar()
             navBarCurrent = 3
             colourNavBar(navBarCurrent)
+            openNavFragment()
         })
     }
 
@@ -86,6 +89,24 @@ class MainActivity : AppCompatActivity() {
         navBarPopular.setImageDrawable(getDrawable(R.drawable.ic_popular_black))
         navBarSms.setImageDrawable(getDrawable(R.drawable.ic_sms_black))
         navBarSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_black))
+    }
+
+    private fun openNavFragment() {
+        val fragmentManager = supportFragmentManager
+        val ft = fragmentManager.beginTransaction()
+        val fragment = GeneralDataFragment.newInstance()
+        if (navBarCurrent == 0) {
+
+        } else if (navBarCurrent == 1) {
+
+        } else if (navBarCurrent == 2) {
+
+        } else if (navBarCurrent == 3) {
+
+        }
+        ft.replace(R.id.container, fragment)
+        ft.commit()
+
     }
 
     private val onNotificationReceived = object : BroadcastReceiver() {

@@ -6,9 +6,10 @@ import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.support.v4.content.LocalBroadcastManager
 import android.util.Log
+import java.util.*
 
 
-class NotificationService : NotificationListenerService() {
+class NotificationService2 : NotificationListenerService() {
 
     private val TAG: String = this.javaClass.simpleName
     private lateinit var context: Context
@@ -22,27 +23,16 @@ class NotificationService : NotificationListenerService() {
         super.onNotificationPosted(sbn)
 
         // Disregard any ongoing notifications, like Spotify
-        if (sbn?.isOngoing == true) return
-        val key = sbn?.key
+        //if (sbn?.isOngoing == true) return
         val packageName = sbn?.packageName
         val postTime = sbn?.postTime
-        val tickerText = sbn?.notification?.tickerText.toString()
-        val extras = sbn?.notification?.extras
-        val title = extras?.getString("android.title")
-        val text = extras?.getCharSequence("android.text")?.toString()
-        val priority = sbn?.notification?.priority
-        val category = sbn?.notification?.category
+        val dayOfTheWeek = Date(postTime!!).day
 
 
         val intent = Intent("NotifiedNotificationReceived")
-        intent.putExtra("key", key)
         intent.putExtra("packageName", packageName)
         intent.putExtra("postTime", postTime)
-        intent.putExtra("tickerText", tickerText)
-        intent.putExtra("title", title)
-        intent.putExtra("text", text)
-        intent.putExtra("priority", priority)
-        intent.putExtra("category", category)
+        intent.putExtra("dayOfWeek", dayOfTheWeek)
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }
@@ -51,28 +41,15 @@ class NotificationService : NotificationListenerService() {
     override fun onNotificationRemoved(sbn: StatusBarNotification?, rankingMap: RankingMap?, reason: Int) {
         super.onNotificationRemoved(sbn, rankingMap, reason)
         // Disregard any ongoing notifications, like Spotify
-        if (sbn?.isOngoing == true) return
-        val key = sbn?.key
+        //if (sbn?.isOngoing == true) return
         val packageName = sbn?.packageName
         val postTime = sbn?.postTime
-        val tickerText = sbn?.notification?.tickerText.toString()
-        val extras = sbn?.notification?.extras
-        val title = extras?.getString("android.title")
-        val text = extras?.getCharSequence("android.text")?.toString()
-        val priority = sbn?.notification?.priority
-        val category = sbn?.notification?.category
-
+        val dayOfTheWeek = Date(postTime!!).day
 
 
         val intent = Intent("NotifiedNotificationRemoved")
-        intent.putExtra("key", key)
         intent.putExtra("packageName", packageName)
         intent.putExtra("postTime", postTime)
-        intent.putExtra("tickerText", tickerText)
-        intent.putExtra("title", title)
-        intent.putExtra("text", text)
-        intent.putExtra("priority", priority)
-        intent.putExtra("category", category)
         intent.putExtra("removalReason", reason)
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
