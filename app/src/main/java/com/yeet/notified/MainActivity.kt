@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import com.crashlytics.android.Crashlytics;
+import com.yeet.notified.Models.NotificationDataBuilder
 import io.fabric.sdk.android.Fabric;
 
 
@@ -17,18 +18,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, IntentFilter("Msg"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationReceived, IntentFilter("NotifiedNotificationReceived"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationRemoved, IntentFilter("NotifiedNotificationRemoved"));
         DBHandler(this)
     }
 
-    private val onNotice = object : BroadcastReceiver() {
+    private val onNotificationReceived = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            val pack = intent.getStringExtra("package")
-            val title = intent.getStringExtra("title")
-            val text = intent.getStringExtra("text")
+            val notificationReceived = NotificationDataBuilder.createNotificationReceived(intent)
+            val dbHandler = DBHandler(context)
+            dbHandler.insertNotificationReceived(notificationReceived)
+        }
+    }
 
+    private val onNotificationRemoved = object : BroadcastReceiver() {
 
+        override fun onReceive(context: Context, intent: Intent) {
+            var notificationRemoved = NotificationDataBuilder.createNotificationRemoved(intent)
+            val dbHandler = DBHandler(context)
+            dbHandler.insertNotificationRemoved(notificationRemoved)
         }
     }
 }

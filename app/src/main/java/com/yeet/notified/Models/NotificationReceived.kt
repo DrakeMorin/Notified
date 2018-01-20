@@ -10,6 +10,6 @@ class NotificationReceived(
         val tickerText: String,
         val title: String,
         val text: String,
-        val priority: Int
-) {
+        val priority: Int,
+        val category: String) {
 }
