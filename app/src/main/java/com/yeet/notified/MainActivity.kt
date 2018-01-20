@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.app.AppCompatActivity
 import com.crashlytics.android.Crashlytics;
-import com.yeet.notified.Models.NotificationDataBuilder
 import io.fabric.sdk.android.Fabric;
 
 
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val onNotificationReceived = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            val notificationReceived = NotificationDataBuilder.createNotificationReceived(intent)
+            val notificationReceived = Utility.createNotificationReceived(intent)
             val dbHandler = DBHandler(context)
             dbHandler.insertNotificationReceived(notificationReceived)
         }
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     private val onNotificationRemoved = object : BroadcastReceiver() {
 
         override fun onReceive(context: Context, intent: Intent) {
-            var notificationRemoved = NotificationDataBuilder.createNotificationRemoved(intent)
+            var notificationRemoved = Utility.createNotificationRemoved(intent)
             val dbHandler = DBHandler(context)
             dbHandler.insertNotificationRemoved(notificationRemoved)
         }
