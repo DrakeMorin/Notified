@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, IntentFilter("Msg"));
-
+        DBHandler(this)
     }
 
     private val onNotice = object : BroadcastReceiver() {
