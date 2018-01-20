@@ -3,6 +3,7 @@ package com.yeet.notified
 import android.database.Cursor
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,10 +78,12 @@ class GeneralDataFragment : Fragment() {
             if (dayNotificationData == null) {
                 val dbHandler = DBHandler(context!!)
                 val entries = dbHandler.getMostPopularTime(true, true, null)
+                if (entries.size < 1) return
                 dayNotificationData = LineDataSet(entries, "Days of the Week")
             }
+
             lineChart.setData(LineData(dayNotificationData))
-            //lineChart.xAxis.valueFormatter = dayXAxisFormatter
+            lineChart.xAxis.valueFormatter = dayXAxisFormatter
             lineChart.invalidate()
         } else if (currentDropDownChoice == 2) {
             if (hourNotificationData == null) {
