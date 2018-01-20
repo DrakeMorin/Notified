@@ -111,7 +111,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     // NOTE: Caller MUST close return value
     private fun getLastNDaysData(days: Int, appName: String?): Cursor {
         val db = readableDatabase
-        val where = if (appName != null) ", ($COL_APP_NAME) = $appName" else ""
+        val where = if (appName != null) ", $COL_APP_NAME = $appName" else ""
 
         val cursor = db.query(
                 TABLE_NOTIFICATION_RECEIVED,
@@ -142,7 +142,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     fun getMostFrequent(category: String, isAsc: Boolean, appName: String?): Cursor {
         val db = readableDatabase
         val sort = if (isAsc) "ASC" else "DESC"
-        val where = if (appName != null) "WHERE ($COL_APP_NAME) = $appName" else ""
+        val where = if (appName != null) "WHERE $COL_APP_NAME = $appName" else ""
 
         val rawSql = "SELECT $category, COUNT($category) FROM $TABLE_NOTIFICATION_RECEIVED $where GROUP BY $category ORDER BY COUNT($category) $sort"
         val cursor = db.rawQuery(rawSql, null)
@@ -157,7 +157,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         val db = readableDatabase
         val sort = if (isAsc) "ASC" else "DESC"
         val day = if (isDay) "DAYNAME($COL_POST_TIME)" else "HOUR($COL_POST_TIME)"
-        val where = if (appName != null) "WHERE ($COL_APP_NAME) = $appName" else ""
+        val where = if (appName != null) "WHERE $COL_APP_NAME = $appName" else ""
 
         val rawSql = "SELECT $day, COUNT($day) FROM $TABLE_NOTIFICATION_RECEIVED $where GROUP BY $day ORDER BY COUNT($day) $sort"
         val cursor = db.rawQuery(rawSql, null)
@@ -165,6 +165,23 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         db.close()
 
         return cursor
+    }
+
+    fun getAllAppNames(): List<String> {
+        val db = readableDatabase
+        val rawSql = "SELECT DISTINCT $COL_APP_NAME FROM $TABLE_NOTIFICATION_RECEIVED"
+        val cursor = db.rawQuery(rawSql, null)
+
+        if (cursor.count == 0) return emptyList()
+        cursor.moveToFirst()
+        val appNames: ArrayList<String> = ArrayList()
+        while(!cursor.isAfterLast) {
+            appNames.add(cursor.getString(cursor.getColumnIndex(COL_APP_NAME)))
+            cursor.moveToNext()
+        }
+        cursor.close()
+        db.close()
+        return appNames
     }
 
 }
