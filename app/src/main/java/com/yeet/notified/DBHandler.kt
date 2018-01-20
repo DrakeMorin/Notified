@@ -5,8 +5,13 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import com.github.mikephil.charting.data.Entry
 import com.yeet.notified.Models.NotificationReceived
 import com.yeet.notified.Models.NotificationRemoved
+import android.R.attr.data
+import android.R.attr.entries
+
+
 
 private const val DATABASE_VERSION = 2
 private const val DATABASE_NAME = "Notified.db"
@@ -108,8 +113,42 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         db.close()
     }
 
+    private fun getEntryListFromCursor(cursor: Cursor): ArrayList<Entry> {
+        var entries: ArrayList<Entry> = ArrayList()
+        cursor.moveToFirst()
+
+        var sundayCount = 0f
+        var mondayCount = 0f
+        var tuesdayCount = 0f
+        var wednesdayCount = 0f
+        var thursdayCount = 0f
+        var fridayCount = 0f
+        var saturdayCount = 0f
+
+        while(!cursor.isAfterLast) {
+            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "sunday") ++sundayCount
+            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "monday") ++mondayCount
+            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "tuesday") ++tuesdayCount
+            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "wednesday") ++wednesdayCount
+            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "thursday") ++thursdayCount
+            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "friday") ++fridayCount
+            if (cursor.getString(cursor.getColumnIndex(COL_APP_NAME)) == "saturday") ++saturdayCount
+            cursor.moveToNext()
+        }
+
+        entries.add(Entry(0f, sundayCount))
+        entries.add(Entry(1f, mondayCount))
+        entries.add(Entry(2f, tuesdayCount))
+        entries.add(Entry(3f, wednesdayCount))
+        entries.add(Entry(4f, thursdayCount))
+        entries.add(Entry(5f, fridayCount))
+        entries.add(Entry(6f, saturdayCount))
+
+        return entries
+    }
+
     // NOTE: Caller MUST close return value
-    private fun getLastNDaysData(days: Int, appName: String?): Cursor {
+    private fun getLastNDaysData(days: Int, appName: String?): List<Entry> {
         val db = readableDatabase
         val where = if (appName != null) ", $COL_APP_NAME = $appName" else ""
 
@@ -123,18 +162,24 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
                 null
         )
 
+        if (cursor.count == 0) return arrayListOf()
+        var entries: ArrayList<Entry> = getEntryListFromCursor(cursor)
+
+        cursor.close()
         db.close()
 
-        return cursor
+        return entries
     }
 
+    var entries: List<Entry> = ArrayList()
+
     // NOTE: Caller MUST close return value
-    fun getLastWeekData(appName: String?): Cursor {
+    fun getLastWeekData(appName: String?): List<Entry> {
         return getLastNDaysData(7, appName)
     }
 
     // NOTE: Caller MUST close return value
-    fun getLastDayData(appName: String?): Cursor {
+    fun getLastDayData(appName: String?): List<Entry> {
         return getLastNDaysData(1, appName)
     }
 
@@ -179,6 +224,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
             appNames.add(cursor.getString(cursor.getColumnIndex(COL_APP_NAME)))
             cursor.moveToNext()
         }
+
         cursor.close()
         db.close()
         return appNames
