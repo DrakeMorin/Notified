@@ -20,8 +20,10 @@ class NotificationService3 : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         super.onNotificationPosted(sbn)
 
-        // Disregard any ongoing notifications, like Spotify
-        //if (sbn?.isOngoing == true) return
+        // Disregard any ongoing notifications, like Spotify if enabled (experimental)
+        val sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val ignoreOngoing = sharedPref?.getBoolean("ignore_ongoing", false) ?: false
+        if (ignoreOngoing && sbn?.isOngoing == true) return
         val packageName = sbn?.packageName
         val postTime = sbn?.postTime
         val dayOfTheWeek = Date(postTime!!).day
@@ -38,8 +40,10 @@ class NotificationService3 : NotificationListenerService() {
 
     override fun onNotificationRemoved(sbn: StatusBarNotification?, rankingMap: RankingMap?, reason: Int) {
         super.onNotificationRemoved(sbn, rankingMap, reason)
-        // Disregard any ongoing notifications, like Spotify
-        //if (sbn?.isOngoing == true) return
+        // Disregard any ongoing notifications, like Spotify if enabled (experimental)
+        val sharedPref = context.getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+        val ignoreOngoing = sharedPref?.getBoolean("ignore_ongoing", false) ?: false
+        if (ignoreOngoing && sbn?.isOngoing == true) return
         val packageName = sbn?.packageName
         val postTime = sbn?.postTime
         val dayOfTheWeek = Date(postTime!!).day

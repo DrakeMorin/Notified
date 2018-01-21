@@ -102,7 +102,9 @@ class MainActivity : AppCompatActivity() {
                 ft.commit()
             }
             2 -> {
-
+                val fragment = SettingsFragment()
+                ft.replace(R.id.container, fragment)
+                ft.commit()
             }
         }
 

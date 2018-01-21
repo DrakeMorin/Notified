@@ -57,6 +57,14 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         onCreate(db)
     }
 
+    fun clearAllTables() {
+        val db = writableDatabase
+        db?.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATION_RECEIVED)
+        db?.execSQL("DROP TABLE IF EXISTS " + TABLE_NOTIFICATION_REMOVED)
+        db?.execSQL("DROP TABLE IF EXISTS " + TABLE_SMS_NOTIFICATION)
+        onCreate(db)
+    }
+
     fun insertNotificationReceived(notification: NotificationReceived) {
         val values = ContentValues()
 
