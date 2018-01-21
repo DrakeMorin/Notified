@@ -16,7 +16,6 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var navBarGeneral: ImageButton
     private lateinit var navBarPopular: ImageButton
-    //private lateinit var navBarSms: ImageButton
     private lateinit var navBarSettings: ImageButton
     private var navBarCurrent: Int = 0
 
@@ -25,10 +24,8 @@ class MainActivity : AppCompatActivity() {
         Fabric.with(this, Crashlytics())
         setContentView(R.layout.activity_main)
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationReceived, IntentFilter("NotifiedNotificationReceived"))
-        //LocalBroadcastManager.getInstance(this).registerReceiver(onNotificationRemoved, IntentFilter("NotifiedNotificationRemoved"));
         navBarGeneral = findViewById(R.id.nav_bar_general)
         navBarPopular = findViewById(R.id.nav_bar_popular)
-        //navBarSms = findViewById(R.id.nav_bar_sms)
         navBarSettings = findViewById(R.id.nav_bar_settings)
         if (savedInstanceState != null) navBarCurrent = savedInstanceState.getInt("NavBarCurrent", 0)
         setUpNavBar()
@@ -37,9 +34,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onSaveInstanceState(savedInstanceState: Bundle?) {
         super.onSaveInstanceState(savedInstanceState)
-        // Save UI state changes to the savedInstanceState.
-        // This bundle will be passed to onCreate if the process is
-        // killed and restarted.
         savedInstanceState?.putInt("NavBarCurrent", navBarCurrent)
     }
 
@@ -57,12 +51,6 @@ class MainActivity : AppCompatActivity() {
             colourNavBar(navBarCurrent)
             openNavFragment()
         })
-        /*navBarSms.setOnClickListener({
-            resetNavBar()
-            navBarCurrent = 2
-            colourNavBar(navBarCurrent)
-            openNavFragment()
-        })*/
         navBarSettings.setOnClickListener({
             resetNavBar()
             navBarCurrent = 2
@@ -75,7 +63,6 @@ class MainActivity : AppCompatActivity() {
         when (item) {
             0 -> navBarGeneral.setImageDrawable(getDrawable(R.drawable.ic_general_blue))
             1 -> navBarPopular.setImageDrawable(getDrawable(R.drawable.ic_popular_blue))
-            //2 -> navBarSms.setImageDrawable(getDrawable(R.drawable.ic_sms_blue))
             2 -> navBarSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_blue))
         }
     }
@@ -83,7 +70,6 @@ class MainActivity : AppCompatActivity() {
     private fun resetNavBar() {
         navBarGeneral.setImageDrawable(getDrawable(R.drawable.ic_general_black))
         navBarPopular.setImageDrawable(getDrawable(R.drawable.ic_popular_black))
-        //navBarSms.setImageDrawable(getDrawable(R.drawable.ic_sms_black))
         navBarSettings.setImageDrawable(getDrawable(R.drawable.ic_settings_black))
     }
 
@@ -118,16 +104,6 @@ class MainActivity : AppCompatActivity() {
             val notificationReceived = Utility.createNotificationReceived(intent, appName)
             val dbHandler = DBHandler(context)
             dbHandler.insertNotificationReceived(notificationReceived)
-        }
-    }
-
-    private val onNotificationRemoved = object : BroadcastReceiver() {
-
-        override fun onReceive(context: Context, intent: Intent) {
-            val appName = Utility.getAppName(intent.getStringExtra("packageName"), applicationContext)
-            val notificationRemoved = Utility.createNotificationRemoved(intent, appName)
-            val dbHandler = DBHandler(context)
-            dbHandler.insertNotificationRemoved(notificationRemoved)
         }
     }
 }

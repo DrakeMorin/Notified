@@ -53,6 +53,7 @@ class NotificationService3 : NotificationListenerService() {
         intent.putExtra("packageName", packageName)
         intent.putExtra("postTime", postTime)
         intent.putExtra("removalReason", reason)
+        intent.putExtra("dayOfWeek", dayOfTheWeek)
 
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent)
     }

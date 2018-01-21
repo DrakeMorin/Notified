@@ -76,7 +76,6 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         val db = writableDatabase
 
         val lon = db.insert(TABLE_NOTIFICATION_RECEIVED, null, values)
-        Log.d("WHORE", "insertID: " + lon)
         db.close()
     }
 
@@ -122,7 +121,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
 
     private fun getEntryListFromCursor(cursor: Cursor): ArrayList<Entry> {
         if (cursor.count == 0) return arrayListOf()
-        var entries: ArrayList<Entry> = ArrayList()
+        val entries: ArrayList<Entry> = ArrayList()
         cursor.moveToFirst()
 
         var sundayCount = 0f
@@ -155,21 +154,6 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
         return entries
     }
 
-    // NOTE: Caller MUST close return value
-    fun getMostFrequent(category: String, isAsc: Boolean, appName: String?): Cursor {
-        val db = readableDatabase
-        val sort = if (isAsc) "ASC" else "DESC"
-        val where = if (appName != null) "WHERE $COL_APP_NAME = '$appName'" else null
-
-        val rawSql = "SELECT $category, COUNT($category) FROM $TABLE_NOTIFICATION_RECEIVED $where GROUP BY $category ORDER BY COUNT($category) $sort"
-        val cursor = db.rawQuery(rawSql, null)
-
-        db.close()
-
-        return cursor
-    }
-
-    // NOTE: Caller MUST close return value
     fun getMostPopularTime(isDay: Boolean, isAsc: Boolean, appName: String?): ArrayList<Entry> {
         val db = readableDatabase
         val where = if (appName != null) "$COL_APP_NAME = '$appName'" else null
