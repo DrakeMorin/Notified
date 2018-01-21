@@ -8,7 +8,7 @@ import android.support.v4.content.LocalBroadcastManager
 import java.util.*
 
 
-class NotificationService2 : NotificationListenerService() {
+class NotificationService3 : NotificationListenerService() {
 
     private lateinit var context: Context
 

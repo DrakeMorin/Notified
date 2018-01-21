@@ -14,6 +14,9 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
+
+
 
 
 
@@ -72,6 +75,7 @@ class GeneralDataFragment : Fragment() {
                 val entries = dbHandler.getPieGraph()
                 if (entries.size < 1) return
                 totalNotificationData = PieDataSet(entries, "Breakdown of Notifications")
+                totalNotificationData!!.setColors(intArrayOf(R.color.lightBlue, R.color.lightGreen, R.color.lightYellow, R.color.lightPurple), context)
             }
             pieChart.setData(PieData(totalNotificationData))
             pieChart.invalidate()

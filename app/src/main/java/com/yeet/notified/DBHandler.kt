@@ -89,15 +89,24 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     private fun getEntryPercentFromCursor(cursor: Cursor, total: Int): ArrayList<PieEntry> {
         if (cursor.count == 0) return arrayListOf()
         val entries: ArrayList<PieEntry> = ArrayList()
+        var counter = 0;
+        var percentSoFar = 0f;
         cursor.moveToFirst()
 
-        while(!cursor.isAfterLast) {
+        while(!cursor.isAfterLast && counter < 5) {
             val appName = cursor.getString(cursor.getColumnIndex(COL_APP_NAME))
             val appCount = cursor.getString(cursor.getColumnIndex("count"))
             val percentage = (java.lang.Float.parseFloat(appCount) / total) * 100
-            Log.d("App thing:", appName + " " + percentage + " " + appCount + " / " + total)
+
+            ++counter
+            percentSoFar += percentage
+
             entries.add(PieEntry(percentage, appName))
             cursor.moveToNext()
+        }
+
+        if (percentSoFar < 100f) {
+            entries.add(PieEntry(100f - percentSoFar, "Other"))
         }
 
         return entries
@@ -166,7 +175,7 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
 
     fun getPieGraph(): ArrayList<PieEntry> {
         val db = readableDatabase
-        val rawQuery = "SELECT $COL_APP_NAME, COUNT($COL_APP_NAME) as count FROM $TABLE_NOTIFICATION_RECEIVED GROUP BY $COL_APP_NAME"
+        val rawQuery = "SELECT $COL_APP_NAME, COUNT($COL_APP_NAME) as count FROM $TABLE_NOTIFICATION_RECEIVED GROUP BY $COL_APP_NAME ORDER BY count DESC"
         val cursor = db.rawQuery(rawQuery, null)
         val cursorToCount = db.query(TABLE_NOTIFICATION_RECEIVED, null, null, null, null, null, null, null)
         val count = cursorToCount.count
