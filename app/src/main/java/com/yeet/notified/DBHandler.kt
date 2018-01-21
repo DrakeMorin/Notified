@@ -89,8 +89,8 @@ class DBHandler(context: Context): SQLiteOpenHelper(context, DATABASE_NAME, null
     private fun getEntryPercentFromCursor(cursor: Cursor, total: Int): ArrayList<PieEntry> {
         if (cursor.count == 0) return arrayListOf()
         val entries: ArrayList<PieEntry> = ArrayList()
-        var counter = 0;
-        var percentSoFar = 0f;
+        var counter = 0
+        var percentSoFar = 0f
         cursor.moveToFirst()
 
         while(!cursor.isAfterLast && counter < 5) {
