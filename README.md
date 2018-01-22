@@ -33,7 +33,7 @@ Main Screen                |  App Specific Screen      | Settings Screen
 - On this screen, you can view the notification data for a specific app.
 - Only apps that have created notifications since Notified was installed will be shown.
 
-## Settings Screen
+### Settings Screen
 - By default energy saving mode will be enabled to minimize the impact of the app running in the background.
 - Notified will also track ongoing notifications for apps like Spotify. You can disable this behaviour, but it is experimental.
 - You can clear all the notification data stored whenever you want.
