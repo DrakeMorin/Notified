@@ -1,4 +1,6 @@
 # Notified
+![Banner](demo/banner.png)
+
 An android app for tracking phone notifications and analyzing your notification and behavioural trends.
 
 Created By: [Drake Morin](https://github.com/DrakeMorin) and [Jacob Steves](https://github.com/jacobsteves)
