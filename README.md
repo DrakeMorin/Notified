@@ -20,9 +20,9 @@ The only prerequisite to this project is the latest version of [Android Studio](
 3. From here, everything should be working. All you need to do is plug in your android device and run the app, or use the simulator within Android Studio itself.
 
 ## Demo
-Main Screen                |  App Specific Screen      | Settings Screen
-:-------------------------:|:-------------------------:|:-------------------------:
-![](demo/pieChart.png)     |  ![](demo/perApp.png)     | ![](demo/settings.png)
+Main Screen                |  App Specific Screen       | Settings Screen
+:-------------------------:|:--------------------------:|:-------------------------:
+![](demo/pieChart.png)     |  ![](demo/perWeek.png)     | ![](demo/settings.png)
 
 ### Main Screen
 - Displays the general usage information for all apps that have created notifications since Notified was installed.
